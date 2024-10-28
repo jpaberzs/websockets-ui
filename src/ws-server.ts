@@ -1,12 +1,16 @@
 import WebSocket, { WebSocketServer } from 'ws';
+import { randomUUID } from 'node:crypto';
 import { WsMessage } from './types/wsMessage';
-import { reg } from './commands';
+import { reg, updateRoom } from './commands';
+import { createRoom } from './commands/create-room';
 
 const wss = new WebSocketServer({ port: 3000 }, () => {
   console.log('WebSocket server started on localhost:3000');
 });
 
 export default wss.on('connection', (ws: WebSocket) => {
+  const randomUserIndex = randomUUID();
+
   console.log('New client connected');
 
   ws.on('message', (message: string) => {
@@ -15,10 +19,12 @@ export default wss.on('connection', (ws: WebSocket) => {
 
     switch (parsedData.type) {
       case 'reg':
-        reg(ws, parsedData.data);
+        reg(ws, parsedData.data, randomUserIndex);
+        updateRoom(wss);
         break;
       case 'create_room':
-        console.log(parsedData.data);
+        createRoom(randomUserIndex);
+        updateRoom(wss);
         break;
       default:
         console.log(`Unknown message type: ${parsedData.type}`);

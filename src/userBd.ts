@@ -3,8 +3,8 @@ import { User } from './types/user';
 const users: User[] = [];
 
 export const createUser = (props: { index: string; name: string; error: boolean }): User => {
-  const { index, name, error } = props;
-  const newUser = { index, name, error };
+  const { index, name } = props;
+  const newUser = { index, name };
 
   users.push(newUser);
   return newUser;
