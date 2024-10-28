@@ -1,12 +1,9 @@
 import { User } from '../types/user';
 import { getUserById } from '../userBd';
 import { createRoomBD } from './../../mainBd';
-import { randomUUID } from 'node:crypto';
 
-export const createRoom = (randomUserIndex: string) => {
+export const createRoom = (randomUserIndex: string, roomId: string) => {
   console.log('Create room trigered');
-
-  const roomId = randomUUID();
 
   const user: User | undefined = getUserById(randomUserIndex);
 

@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { WsMessage } from './types/wsMessage';
 import { reg, updateRoom } from './commands';
 import { createRoom } from './commands/create-room';
+import { addUserToRoomBD } from '../mainBd';
 
 const wss = new WebSocketServer({ port: 3000 }, () => {
   console.log('WebSocket server started on localhost:3000');
@@ -10,6 +11,7 @@ const wss = new WebSocketServer({ port: 3000 }, () => {
 
 export default wss.on('connection', (ws: WebSocket) => {
   const randomUserIndex = randomUUID();
+  const roomId = randomUUID();
 
   console.log('New client connected');
 
@@ -23,8 +25,18 @@ export default wss.on('connection', (ws: WebSocket) => {
         updateRoom(wss);
         break;
       case 'create_room':
-        createRoom(randomUserIndex);
+        createRoom(randomUserIndex, roomId);
         updateRoom(wss);
+        break;
+      case 'add_user_to_room':
+        console.log('Add user to room');
+
+        const content: { indexRoom: string } = JSON.parse(parsedData.data);
+
+        addUserToRoomBD(content.indexRoom, randomUserIndex);
+        updateRoom(wss);
+        break;
+      case 'create_game':
         break;
       default:
         console.log(`Unknown message type: ${parsedData.type}`);
