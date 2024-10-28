@@ -13,8 +13,16 @@ export default wss.on('connection', (ws: WebSocket) => {
     const jsonString = Buffer.from(message).toString('utf-8');
     const parsedData: WsMessage = JSON.parse(jsonString);
 
-    if (parsedData.type === 'reg') {
-      reg(ws, parsedData.data);
+    switch (parsedData.type) {
+      case 'reg':
+        reg(ws, parsedData.data);
+        break;
+      case 'create_room':
+        console.log(parsedData.data);
+        break;
+      default:
+        console.log(`Unknown message type: ${parsedData.type}`);
+        break;
     }
   });
 

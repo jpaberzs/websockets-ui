@@ -11,3 +11,5 @@ export const createUser = (props: { index: string; name: string; error: boolean 
 };
 
 export const getUsers = (): User[] => users;
+
+export const getUserById = (id: string): User | undefined => users.find((u) => u.index === id);
