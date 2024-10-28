@@ -16,6 +16,10 @@ export const createRoomBD = (roomId: string, user: User): Room => {
 
 export const getRooms = (): Room[] => rooms;
 
+export const getRoomByID = (roomId: string): Room | undefined => {
+  return rooms.find((r) => r.roomId === roomId);
+};
+
 export const addUserToRoomBD = (roomId: string, randomUserIndex: string): Room | undefined => {
   const users = getUsers();
 
